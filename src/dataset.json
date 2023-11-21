@@ -1,0 +1,20 @@
+[
+  {
+    "lat": 45.9598,
+    "long": 5.3582,
+    "libele": "AMBERIEU EN BUGEY",
+    "caracteristique": "Bureau de Poste"
+  },
+  {
+    "lat": 45.99639,
+    "long": 4.903345,
+    "libele": "AMBERIEU EN DOMBES BP",
+    "caracteristique": "Bureau de Poste"
+  },
+  {
+    "lat": 45.9116,
+    "long": 5.8083,
+    "libele": "ANGLEFORT RP",
+    "caracteristiques": "Relais poste commerçant"
+  }
+]
