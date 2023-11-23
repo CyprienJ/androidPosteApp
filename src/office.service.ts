@@ -3,7 +3,7 @@ import { Office, compareWithTitle } from './Office';
 import { readFile } from 'fs/promises';
 import { HttpService } from '@nestjs/axios';
 import { first, firstValueFrom, map, tap } from 'rxjs';
-import { OfficeDTO } from './OfficeDTO';
+import { OfficeDTO, PropertiesType, DataSetDTO } from './OfficeDTO';
 
 @Injectable()
 export class OfficeService implements OnModuleInit {
@@ -12,54 +12,49 @@ export class OfficeService implements OnModuleInit {
   constructor(private readonly httpService: HttpService) {}
 
   async onModuleInit() {
+    await this.loadOfficesFromFile();
     console.log(`Storage contains ${this.storage.size} offices`);
   }
+  private async loadOfficesFromFile(){
+    const data = await readFile('src/laposte-poincont2.json');
+    const test: DataSetDTO = JSON.parse(data.toString());
+    const offices : Array<OfficeDTO> = test.features;
+    offices.forEach((properties) => this.addOffice({
+      lat : properties.properties.latitude,
+      long : properties.properties.longitude,
+      libele : properties.properties.libelle_du_site,
+      carcteristique : properties.properties.caracteristique_du_site,
+    }))
 
-  private async loadBooksFromFile() {
-    const data = await readFile('src/dataset.json');
-    const offices: Array<Office> = JSON.parse(data.toString());
-    offices.forEach((office) => this.addBook(office));
   }
-
-  private async loadBooksFromServer(): Promise<void> {
-    return firstValueFrom(
-      this.httpService.get('https://api.npoint.io/fbb2a6039fc21e320b30').pipe(
-        map((response) => response.data),
-        tap((offices: OfficeDTO[]) => {
-          offices.forEach((office) =>
-            this.addBook({
-              lat: office.lat,
-              long: office.long,
-              libele: office.libele,
-              carcteristique: office.caracteristique,
-            }),
-          );
-        }),
-        map(() => undefined),
-      ),
-    );
-  }
-
-  addBook(office: Office) {
+  addOffice(office: Office) {
     this.storage.set(office.libele, office);
   }
 
-  getBook(libele: string): Office {
-    const book = this.storage.get(libele);
-    if (!book) {
+  getOffice(libele: string): Office {
+    const office = this.storage.get(libele);
+    if (!office) {
       throw new Error(`Office named ${libele} not found`);
     }
-    return book;
+    return office;
   }
 
-  getAllBooks(): Array<Office> {
+  getAllOffices(): Array<Office> {
     return Array.from(this.storage.values()).sort(compareWithTitle);
   }
 
-  getBooksOfCaracteristique(caracteristique: string): Array<Office> {
-    return this.getAllBooks()
-      .filter((office) => office.carcteristique === caracteristique)
-      .sort(compareWithTitle);
+  displayAllOffices(): void{
+    let array : Array<Office> = Array.from(this.storage.values()).sort(compareWithTitle);
+    for (let i = 0; i < array.length; i++) {
+      console.log(array[i].libele);
+    }
+  }
+
+  getOfficesOfCaracteristique(caracteristique: string): Array<Office> {
+    console.log(caracteristique);
+    return this.getAllOffices()
+        .filter((office) => office.carcteristique === caracteristique)
+        .sort(compareWithTitle);
   }
 
   getTotalNumberOfOffices(): number {
