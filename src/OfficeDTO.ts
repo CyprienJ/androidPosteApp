@@ -18,7 +18,7 @@ export interface PropertiesType{
   _id : string;
 }
 
-export interface DataSetDTO { //
+export interface DataSetDTO {
   type : string;
   total : string;
   features : Array<OfficeDTO>;
