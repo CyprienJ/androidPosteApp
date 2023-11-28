@@ -24,14 +24,14 @@ export class Office {
    * type of the post office
    */
   @IsString()
-  carcteristique: string;
+  caracteristique: string;
 
 
   constructor(lat: number, long: number, libele: string, caracteristique: string) {
     this.lat = lat;
     this.long = long;
     this.libele = libele;
-    this.carcteristique = caracteristique;
+    this.caracteristique = caracteristique;
   }
 }
 

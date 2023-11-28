@@ -23,7 +23,7 @@ export class OfficeService implements OnModuleInit {
       lat : properties.properties.latitude,
       long : properties.properties.longitude,
       libele : properties.properties.libelle_du_site,
-      carcteristique : properties.properties.caracteristique_du_site,
+      caracteristique : properties.properties.caracteristique_du_site,
     }))
 
   }
@@ -53,7 +53,7 @@ export class OfficeService implements OnModuleInit {
   getOfficesOfCaracteristique(caracteristique: string): Array<Office> {
     console.log(caracteristique);
     return this.getAllOffices()
-        .filter((office) => office.carcteristique === caracteristique)
+        .filter((office) => office.caracteristique === caracteristique)
         .sort(compareWithTitle);
   }
 
